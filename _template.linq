@@ -11,7 +11,7 @@ void Main() {
 [TestFixture]
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnData_ReturnsExpected(int actual, int expected) {
+    public void Run_OnTestCases_AssertPasses(int actual, int expected) {
 		Assert.AreEqual(expected: "smth", actual: "smth");
     }
 }
@@ -19,7 +19,7 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData("actual", "expected"); 
+            yield return new TestCaseData("actual", "expected");
         }
     }
 }

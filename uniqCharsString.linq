@@ -11,7 +11,7 @@ void Main() {
 static class Algos {
     internal static bool IsCharsUnique(string str) {
         var hash = new HashSet<char>();
-        foreach (var chr in str)            
+        foreach (var chr in str)
             if (hash.Contains(chr))
                 return false;
             else
@@ -21,13 +21,15 @@ static class Algos {
     }
     
     internal static bool IsCharsUniquePlain(string str) {
-//        var hash = new HashSet<char>();
-//        foreach (var chr in str)            
-//            if (hash.Contains(chr))
-//                return false;
-//            else
-//                hash.Add(chr);
-//
+        const int charCount = 0xffff + 1;
+        var arr = new int [charCount];
+        foreach (var chr in str) {
+            int ix = (int)chr;
+            if (arr[ix] == 1)                
+                return false;
+            else
+                arr[ix] = 1;
+        }
         return true;
     }
 }
@@ -54,6 +56,8 @@ class TestCaseStorage {
             yield return new TestCaseData("asdf").Returns(true);
             yield return new TestCaseData("asddf").Returns(false);
             yield return new TestCaseData("aaasssddfff").Returns(false);
+            yield return new TestCaseData("\u0000\u0000").Returns(false);
+            yield return new TestCaseData("\uffff\uffff").Returns(false);
         }
     }
 }
