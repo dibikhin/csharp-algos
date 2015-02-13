@@ -14,33 +14,28 @@ static class Algos {
         var stubChars = newValue.ToCharArray();
         var s = arr.Length - 1;
         var d = arr.Length - 1;
-        //var wordFound = false;
-        while (s > -1 && d > -1) {
-            //arr[s].Dump(); arr[d].Dump();
+        while (s > 2 && d > 1) {            
             var sChar = arr[s];
             var dChar = arr[d];
             if (sChar == ' ') {
                 s -= 1;
             } else {
-                //wordFound = true;
-                while (s > -1 && d > -1 && sChar != ' ') {                    
+                while (s > 2 && d > 1 && sChar != ' ') {
+                    string.Join("", arr).Dump();
                     arr[d] = sChar;
                     arr[s] = dChar;
                     s -= 1;
                     d -= 1;
-                    if (s > -1 && d > -1) {
-                        sChar = arr[s];
-                        dChar = arr[d];
-                    }
+                    sChar = arr[s];
+                    dChar = arr[d];      
                 }
-                for (var i = 2; i > -1 ; i--) {
-                    string.Join("", arr).Dump();
+                for (var i = 2; i > -1 ; i--) {                        
                     arr[d] = stubChars[i];
                     d -= 1;
-                }
+                    string.Join("", arr).Dump();
+                    s.Dump("s");d.Dump("d");
+                }                
             }
-                       
-            //arr.Dump();
         }
         
         return string.Join("", arr);
