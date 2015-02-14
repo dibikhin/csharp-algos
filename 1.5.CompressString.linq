@@ -10,6 +10,11 @@ void Main() {
 
 static class Algos {
     internal static string Compress(this string str) {
+        var arr = new int[0xffff];
+        foreach (var ch in str) {
+            arr[(int)ch] += 1;
+        }
+        arr.Where(i=>i>0).Dump();
         return str;
     }
 }
@@ -25,7 +30,7 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData("aabcccccaaa").Returns("a2blc5a3");
+            yield return new TestCaseData("aabcccccaaa").Returns("a2b1c5a3");
         }
     }
 }
