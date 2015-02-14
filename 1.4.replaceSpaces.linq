@@ -14,13 +14,13 @@ static class Algos {
         var stubChars = newValue.ToCharArray();
         var s = arr.Length - 1;
         var d = arr.Length - 1;
-        while (s > 2 && d > 1) {            
+        while (s > -1 && d > -1) {            
             var sChar = arr[s];
             var dChar = arr[d];
             if (sChar == ' ') {
                 s -= 1;
             } else {
-                while (s > 2 && d > 1 && sChar != ' ') {
+                while (s > -1 && d > -1 && sChar != ' ') {
                     string.Join("", arr).Dump();
                     arr[d] = sChar;
                     arr[s] = dChar;
