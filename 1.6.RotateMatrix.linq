@@ -10,6 +10,13 @@ void Main() {
 
 static class Algos {
     internal static int[,] Rotate(this int[,] arr) {
+        for (var n = 0; n < arr.GetLength(0); n++)
+            for (var p = 0; p < arr.GetLength(1); p++)
+                if (n > p) {
+                    var temp = arr[p, n];
+                    arr[p, n] = arr[n, p];
+                    arr[n, p] = temp;
+                }        
         return arr;
     }
 }
@@ -25,7 +32,7 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(new int[,] { { 1, 2 }, { 3, 4 } }, new int[,] { { 1, 4 }, { 3, 2 } });
+            yield return new TestCaseData(new int[,] { { 1, 2 }, { 3, 4 } }, new int[,] { { 1, 3 }, { 2, 4 } });
         }
     }
 }
