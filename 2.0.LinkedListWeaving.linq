@@ -15,6 +15,7 @@ void Main()
 	
 	Node.RunWeave(Tuple.Create(node7, node5));
 	list.Traverse();
+    list.Dump();
 }
 
 // Define other methods and classes here
