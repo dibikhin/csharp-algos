@@ -2,6 +2,7 @@
   <Reference>C:\Libs\MongoDB.Bson.dll</Reference>
   <Reference>C:\Libs\nunitlite.dll</Reference>
   <Namespace>MongoDB.Bson</Namespace>
+  <Namespace>MongoDB.Bson.IO</Namespace>
   <Namespace>NUnit.Framework</Namespace>
   <Namespace>NUnitLite.Runner</Namespace>
 </Query>
@@ -12,6 +13,8 @@ void Main() {
 
 static class Algos {
     internal static Node RemoveDups (Node node) {
+        var hashSet = new HashSet<int?>();
+        Node.Traverse(node, (n) => hashSet.Add(n.Data));
         return node;
     }
 }
@@ -19,6 +22,8 @@ static class Algos {
 internal class Node {
 	public int? Data { get; private set; }
 	public Node Next { get; set; }
+    //public Node Rand { get; set; }
+    //public IEnumerable<int> Nums { get; set; }
 	
 	internal Node () { }
 	
@@ -39,6 +44,14 @@ internal class Node {
 		var currentNode = this;
 		while (currentNode != null) {
 			("Data: " + currentNode.Data).Dump();
+			currentNode = currentNode.Next;
+		}
+	}
+    
+    internal static void Traverse (Node node, Action<Node> add) {
+		var currentNode = node;
+		while (currentNode != null) {
+			add(currentNode);
 			currentNode = currentNode.Next;
 		}
 	}
@@ -64,7 +77,9 @@ internal class Node {
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void RemoveDuplicates_OnTestCases_AssertPasses(Node listDups, Node listDistinct) {
-        listDistinct.ToJson().Dump();
+        var cfg = new JsonWriterSettings();
+        cfg.Indent = true;
+        //listDistinct.ToJson(cfg).Dump();
 		Assert.AreEqual(expected: listDistinct.ToJson(), actual: Algos.RemoveDups(listDups).ToJson());
     }
 }
@@ -77,7 +92,8 @@ class TestCaseStorage {
     }
     
     static Node ComposeLinkedList() {
-        var list = ComposeLinkedListDistinct().AppendToTail(new Node(7));
+        var list = ComposeLinkedListDistinct();
+        list.AppendToTail(new Node(7));
         //list.Traverse(); "---".Dump();
         //list.Traverse();
         return list;
@@ -85,6 +101,9 @@ class TestCaseStorage {
     
     static Node ComposeLinkedListDistinct() {
         Node list = new Node(5);
+//        list.Rand = new Node(9);
+//        list.Nums = new [] { 3, 2, 1 };
+//        list.Rand.Next = new Node(11);
         list.AppendToTail(new Node(6));        
         list.AppendToTail(new Node(7));
         return list;
