@@ -14,7 +14,16 @@ void Main() {
 static class Algos {
     internal static Node RemoveDups (Node node) {
         var hashSet = new HashSet<int?>();
-        Node.Traverse(node, (n) => hashSet.Add(n.Data));
+        var curNode = node;
+        Node prevNode = null;
+		while (curNode != null) {
+			if (hashSet.Contains(curNode.Data))
+                prevNode.Next = curNode.Next;
+            else
+                hashSet.Add(curNode.Data);
+            prevNode = curNode;
+			curNode = curNode.Next;
+		}
         return node;
     }
 }
@@ -59,9 +68,9 @@ internal class Node {
 	internal Node ExtractNext () {
 		if (this.Next == null) return null;
 		
-		var extracted = Next;		
+		var extracted = Next;
 		Next = Next.Next;
-		return extracted;		
+		return extracted;
 	}
 	
 	internal Node InsertAfter (Node inserting) {
@@ -73,13 +82,20 @@ internal class Node {
 	}
 }
 
+static class Helpers {
+    internal static string ToPrettyJson<T>(this T obj) {
+        var cfg = new JsonWriterSettings();
+        cfg.Indent = true;
+        return obj.ToJson(cfg);
+    }
+}
+
 [TestFixture]
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void RemoveDuplicates_OnTestCases_AssertPasses(Node listDups, Node listDistinct) {
-        var cfg = new JsonWriterSettings();
-        cfg.Indent = true;
-        //listDistinct.ToJson(cfg).Dump();
+//        listDistinct.ToPrettyJson().Dump();
+//        listDups.ToPrettyJson().Dump();
 		Assert.AreEqual(expected: listDistinct.ToJson(), actual: Algos.RemoveDups(listDups).ToJson());
     }
 }
@@ -92,20 +108,14 @@ class TestCaseStorage {
     }
     
     static Node ComposeLinkedList() {
-        var list = ComposeLinkedListDistinct();
-        list.AppendToTail(new Node(7));
-        //list.Traverse(); "---".Dump();
-        //list.Traverse();
+        Node list = new Node(5);
+        list.AppendToTail(new Node(6)).AppendToTail(new Node(7)).AppendToTail(new Node(7));
         return list;
     }
     
     static Node ComposeLinkedListDistinct() {
         Node list = new Node(5);
-//        list.Rand = new Node(9);
-//        list.Nums = new [] { 3, 2, 1 };
-//        list.Rand.Next = new Node(11);
-        list.AppendToTail(new Node(6));        
-        list.AppendToTail(new Node(7));
+        list.AppendToTail(new Node(6)).AppendToTail(new Node(7));
         return list;
     }
 }
