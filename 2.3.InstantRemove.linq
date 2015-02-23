@@ -17,7 +17,10 @@ static class Algos {
             if (curNode.Data == node.Data) {
                 while (curNode.Next != null) {
                     curNode.Data = curNode.Next.Data;
-                    curNode = curNode.Next;
+                    if (curNode.Next.Next == null)
+                        curNode.Next = null;
+                    else
+                        curNode = curNode.Next;
                 }
             }
             curNode = curNode.Next;
