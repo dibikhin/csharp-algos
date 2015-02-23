@@ -11,12 +11,22 @@ void Main() {
 }
 
 static class Algos {
-    internal static void InstantRemove (Node node) {
+    internal static void InstantRemove(Node list, Node node) {
+        var curNode = list;
+        while (curNode != null) {
+            if (curNode.Data == node.Data) {
+                while (curNode.Next != null) {
+                    curNode.Data = curNode.Next.Data;
+                    curNode = curNode.Next;
+                }
+            }
+            curNode = curNode.Next;
+        }
     }
 }
 
 internal class Node {
-	public int? Data { get; private set; }
+	public int? Data { get; set; }
 	public Node Next { get; set; }
 	
 	internal Node () { }
@@ -39,7 +49,7 @@ internal class Node {
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses (Node origList, Node cleanList, Node extraNode) {
-        Algos.InstantRemove(extraNode);
+        Algos.InstantRemove(origList, extraNode);
 		Assert.AreEqual(expected: cleanList.ToJson(), actual: origList.ToJson());
     }
 }
