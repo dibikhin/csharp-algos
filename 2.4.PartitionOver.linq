@@ -11,15 +11,28 @@ void Main() {
 }
 
 static class Algos {
-    internal static void PartitionOver(Node list, int num) {
+    internal static void PartitionOver(Node list, int pivotNum) {
+        // find pivot
         var curNode = list;
         Node pivot = null;
         while (curNode != null) {
-            if (curNode.Data == num) {
+            if (curNode.Data == pivotNum) {
                 pivot = curNode;
                 break;
             }
             curNode = curNode.Next;
+        }
+        
+        // partition it
+        if (pivot != null) {
+            curNode = list; // var!
+            while (curNode != null) {
+                if (curNode.Data > pivot.Data) {                    
+                    curNode.Next = pivot.Next;
+                    pivot.Next = curNode;
+                }
+                curNode = curNode.Next;
+            }
         }
     }
 }
@@ -48,7 +61,7 @@ internal class Node {
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(Node origList, Node partitionedList, int num) {
-        Algos.PartitionOver(origList, num);
+        Algos.PartitionOver(origList, pivotNum: num);
 		Assert.AreEqual(expected: partitionedList.ToJson(), actual: origList.ToJson());
     }
 }
@@ -56,19 +69,25 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(ComposeLinkedList(), ComposeLinkedListPartitioned(), 6);
+            yield return new TestCaseData(ComposeLinkedList(), ComposeLinkedListPartitioned(), 5);
         }
     }
     
     static Node ComposeLinkedList() {
-        Node list = new Node(5);
-        list.AppendToTail(new Node(6)).AppendToTail(new Node(7));
+        Node list = new Node(7);
+        list.AppendToTail(new Node(4))
+            .AppendToTail(new Node(9))
+            .AppendToTail(new Node(5))
+            .AppendToTail(new Node(8));
         return list;
     }
     
     static Node ComposeLinkedListPartitioned() {
-        Node list = new Node(5);
-        list.AppendToTail(new Node(7));
+        Node list = new Node(4);
+        list.AppendToTail(new Node(5))
+            .AppendToTail(new Node(9))
+            .AppendToTail(new Node(7))
+            .AppendToTail(new Node(8));
         return list;
     }
 }
