@@ -22,18 +22,22 @@ static class Algos {
             }
             curNode = curNode.Next;
         }
-        
+        list.Dump();
+        pivot.Dump();
+        return;
         // partition it
         if (pivot != null) {
             curNode = list; // var!
             while (curNode != null) {
+                var temp = curNode.Next;
                 if (curNode.Data > pivot.Data) {                    
                     curNode.Next = pivot.Next;
                     pivot.Next = curNode;
                 }
-                curNode = curNode.Next;
+                curNode = temp;
             }
         }
+        list.Dump();
     }
 }
 
