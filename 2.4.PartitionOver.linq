@@ -30,10 +30,20 @@ static class Algos {
             curNode = list; // var!
             while (curNode != null) {
                 var temp = curNode.Next;
-                if (curNode.Data > pivot.Data && curNode != pivot) {                   
-                    curNode.Next = pivot.Next;
-                    pivot.Next = curNode;
+                if (curNode.Data > pivot.Data) {
+                    //curNode.Next = null;
+                    //pivot.AppendToTail(curNode);
                 }
+                curNode = temp;
+//                if (curNode.Data > pivot.Data && curNode != pivot) {                   
+//                    curNode.Next = pivot.Next;
+//                    pivot.Next = curNode;
+//                }
+//                if (curNode != temp) {
+//                    curNode = temp;
+//                } else {
+//                    curNode = temp.Next;
+//                }
             }
         }
         list.Dump();
