@@ -11,7 +11,7 @@ void Main() {
 }
 
 static class Algos {
-    internal static void PartitionOver(Node list, int pivotNum) {
+    internal static Node PartitionOver(Node list, int pivotNum) {
         // find pivot
         var curNode = list;
         Node pivot = null;
@@ -22,31 +22,19 @@ static class Algos {
             }
             curNode = curNode.Next;
         }
-//        list.Dump();
-//        pivot.Dump();
-//        return;
+        
         // partition it
         if (pivot != null) {
             curNode = list; // var!
-            while (curNode != null) {
-                var temp = curNode.Next;
-                if (curNode.Data > pivot.Data) {
-                    //curNode.Next = null;
-                    //pivot.AppendToTail(curNode);
-                }
+            Node temp = null;
+            while (curNode != null && curNode.Data > pivot.Data) {
+                temp = curNode.Next;                                
+                curNode.Next = pivot.Next;
+                pivot.Next = curNode;                
                 curNode = temp;
-//                if (curNode.Data > pivot.Data && curNode != pivot) {                   
-//                    curNode.Next = pivot.Next;
-//                    pivot.Next = curNode;
-//                }
-//                if (curNode != temp) {
-//                    curNode = temp;
-//                } else {
-//                    curNode = temp.Next;
-//                }
             }
         }
-        list.Dump();
+        return pivot;
     }
 }
 
@@ -74,8 +62,8 @@ internal class Node {
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(Node origList, Node partitionedList, int num) {
-        Algos.PartitionOver(origList, pivotNum: num);
-		Assert.AreEqual(expected: partitionedList.ToJson(), actual: origList.ToJson());
+        var partedList = Algos.PartitionOver(origList, pivotNum: num);
+		Assert.AreEqual(expected: partitionedList.ToJson(), actual: partedList.ToJson());
     }
 }
 
@@ -88,17 +76,24 @@ class TestCaseStorage {
     
     static Node ComposeLinkedList() {
         Node list = new Node(7);
-        list.AppendToTail(new Node(4))
-            .AppendToTail(new Node(9))
+        list.AppendToTail(new Node(9))
             .AppendToTail(new Node(5))
             .AppendToTail(new Node(8));
         return list;
     }
     
+//    static Node ComposeLinkedList() {
+//        Node list = new Node(7);
+//        list.AppendToTail(new Node(4))  !!!
+//            .AppendToTail(new Node(9))
+//            .AppendToTail(new Node(5))
+//            .AppendToTail(new Node(8));
+//        return list;
+//    }
+    
     static Node ComposeLinkedListPartitioned() {
-        Node list = new Node(4);
-        list.AppendToTail(new Node(5))
-            .AppendToTail(new Node(9))
+        Node list = new Node(5);
+        list.AppendToTail(new Node(9))
             .AppendToTail(new Node(7))
             .AppendToTail(new Node(8));
         return list;
