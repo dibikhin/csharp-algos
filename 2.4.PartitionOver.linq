@@ -24,14 +24,33 @@ static class Algos {
         }
         
         // partition it
+//        if (pivot != null) {
+//            curNode = list; // var!
+//            Node temp = null;
+//            while (curNode != null && curNode.Data > pivot.Data) {
+//                temp = curNode.Next;
+//                curNode.Next = pivot.Next;
+//                pivot.Next = curNode;
+//                curNode = temp;
+//            }
+//        }
+
         if (pivot != null) {
-            curNode = list; // var!
+            var cur = list;
             Node temp = null;
-            while (curNode != null && curNode.Data > pivot.Data) {
-                temp = curNode.Next;                                
-                curNode.Next = pivot.Next;
-                pivot.Next = curNode;                
-                curNode = temp;
+            Node prev = null;
+            while (cur != null && cur != pivot) {
+                temp = cur.Next;
+                if (cur.Data > pivot.Data && prev != null) {
+                    prev.Next = cur.Next;
+                    cur.Next = pivot.Next;
+                    pivot.Next = cur;
+                } else if (cur.Data > pivot.Data && prev == null) {
+                    cur.Next = pivot.Next;
+                    pivot.Next = cur;
+                }
+                prev = cur;
+                cur = temp;
             }
         }
         return pivot;
@@ -70,30 +89,40 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(ComposeLinkedList(), ComposeLinkedListPartitioned(), 5);
+            yield return new TestCaseData(ComposeLinkedListLeftAreGreater(), ComposeLinkedListPartitioned(), 5);
+            yield return new TestCaseData(ComposeLinkedListLeftAreMixed(), ComposeLinkedListPartitioned2(), 5);
         }
     }
     
-    static Node ComposeLinkedList() {
+    static Node ComposeLinkedListLeftAreGreater() {
         Node list = new Node(7);
         list.AppendToTail(new Node(9))
             .AppendToTail(new Node(5))
             .AppendToTail(new Node(8));
         return list;
     }
-    
-//    static Node ComposeLinkedList() {
-//        Node list = new Node(7);
-//        list.AppendToTail(new Node(4))  !!!
-//            .AppendToTail(new Node(9))
-//            .AppendToTail(new Node(5))
-//            .AppendToTail(new Node(8));
-//        return list;
-//    }
-    
+
     static Node ComposeLinkedListPartitioned() {
         Node list = new Node(5);
         list.AppendToTail(new Node(9))
+            .AppendToTail(new Node(7))
+            .AppendToTail(new Node(8));
+        return list;
+    }
+    
+    static Node ComposeLinkedListLeftAreMixed() {
+        Node list = new Node(7);
+        list.AppendToTail(new Node(4))
+            .AppendToTail(new Node(9))
+            .AppendToTail(new Node(5))
+            .AppendToTail(new Node(8));
+        return list;
+    }
+
+    static Node ComposeLinkedListPartitioned2() {
+        Node list = new Node(4);
+        list.AppendToTail(new Node(5))
+            .AppendToTail(new Node(9))
             .AppendToTail(new Node(7))
             .AppendToTail(new Node(8));
         return list;
