@@ -34,11 +34,11 @@ static class Algos {
 //                curNode = temp;
 //            }
 //        }
-
+        Node prev = null;
         if (pivot != null) {
             var cur = list;
             Node temp = null;
-            Node prev = null;
+            
             while (cur != null && cur != pivot) {
                 temp = cur.Next;
                 if (cur.Data > pivot.Data && prev != null) {
@@ -53,7 +53,7 @@ static class Algos {
                 cur = temp;
             }
         }
-        return pivot;
+        return prev;
     }
 }
 
