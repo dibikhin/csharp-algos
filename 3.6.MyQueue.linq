@@ -8,10 +8,17 @@ void Main() {
     new NUnitLite.Runner.TextUI().Execute(new[] { "-noheader" });
 }
 
+internal class MyQueue<T> {
+    public int Count { get; set; }
+    public T Data { get; set; }
+    public T Pop() { return (T)new object(); }
+    public void Push(T t) {}
+}
+
 [TestFixture]
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnTestCases_AssertPasses(MyQueue q, int count) {
+    public void Run_OnTestCases_AssertPasses(MyQueue<string> q, int count) {
 		Assert.AreEqual(expected: count, actual: q.Count);
     }
 }
@@ -19,7 +26,7 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(new MyQueue(), 0);
+            yield return new TestCaseData(new MyQueue<string>(), 0);
         }
     }
 }
