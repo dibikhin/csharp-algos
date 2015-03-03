@@ -9,10 +9,28 @@ void Main() {
 }
 
 internal class MyQueue<T> {
-    public int Count { get; set; }
-    public T Data { get; set; }
-    public T Pop() { return (T)new object(); }
-    public void Push(T t) {}
+    public int Count {
+        get {
+            return _stack1.Count != 0
+                ? _stack1.Count
+                : _stack2.Count;
+        }
+    }
+
+    public T Dequeue() {
+        while (_stack1.Count > 0) {
+            var temp = _stack1.Pop();
+            _stack2.Push(temp);
+        }
+        return _stack2.Pop();
+    }
+
+    public void Enqueue(T obj) {
+        _stack1.Push(obj);
+    }
+
+    private Stack<T> _stack1 = new Stack<T>();
+    private Stack<T> _stack2 = new Stack<T>();
 }
 
 [TestFixture]
@@ -26,7 +44,20 @@ internal class Tests {
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(new MyQueue<string>(), 0);
+            yield return new TestCaseData(Data.Zero(), 0);
+            yield return new TestCaseData(Data.One("zxcv"), 1);
         }
+    }
+}
+
+static class Data {
+    internal static MyQueue<string> Zero() {
+        return new MyQueue<string>();
+    }
+
+    internal static MyQueue<string> One(string str) {
+        var q = new MyQueue<string>();
+        q.Enqueue(str);
+        return q;
     }
 }
