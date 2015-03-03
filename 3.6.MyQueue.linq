@@ -11,26 +11,30 @@ void Main() {
 internal class MyQueue<T> {
     public int Count {
         get {
-            return _stack1.Count != 0
-                ? _stack1.Count
-                : _stack2.Count;
+            return _stack1.Count;
         }
     }
 
     public T Dequeue() {
-        while (_stack1.Count > 0) {
-            var temp = _stack1.Pop();
-            _stack2.Push(temp);
-        }
-        return _stack2.Pop();
+        Transfuse(_stack1, _stack2);
+        var temp = _stack2.Pop();
+        Transfuse(_stack2, _stack1);
+        return temp;
     }
 
     public void Enqueue(T obj) {
         _stack1.Push(obj);
+        _stack1.Dump();
     }
 
     private Stack<T> _stack1 = new Stack<T>();
     private Stack<T> _stack2 = new Stack<T>();
+    
+    private void Transfuse(Stack<T> @from, Stack<T> to) {
+        while (@from.Count > 0) {
+            to.Push(@from.Pop());
+        }
+    }
 }
 
 [TestFixture]
@@ -46,6 +50,7 @@ class TestCaseStorage {
         get {
             yield return new TestCaseData(Data.Zero(), 0);
             yield return new TestCaseData(Data.One("zxcv"), 1);
+            yield return new TestCaseData(Data.Two("asdf", "qwer"), 2);
         }
     }
 }
@@ -58,6 +63,13 @@ static class Data {
     internal static MyQueue<string> One(string str) {
         var q = new MyQueue<string>();
         q.Enqueue(str);
+        return q;
+    }
+    
+    internal static MyQueue<string> Two(string str1, string str2) {
+        var q = new MyQueue<string>();
+        q.Enqueue(str1);
+        q.Enqueue(str2);
         return q;
     }
 }
