@@ -16,26 +16,36 @@ internal class MyStack<T> {
     }
 
     public T Pop() {
-        return (T)new object();
+        if (_top != null) {
+            var node = _top;
+            _top = _top.Next;
+            _count -= 1;
+            return node.Data;
+        } else {
+            throw new InvalidOperationException("your stack is empty");
+        } 
     }
 
     public void Push(T obj) {
-
+        var node = new Node<T> { Data = obj, Next = _top };
+        _top = node;
+        _count += 1;
     }
     
     private int _count = 0;
-    private Node<T> _top = null;
+    public Node<T> _top = null;
 }
 
-class Node<T> {
-    T Data { get; set; }
-    Node<T> Next { get; set; }
+internal class Node<T> {
+    public T Data { get; set; }
+    public Node<T> Next { get; set; }
 }
 
 [TestFixture]
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(MyStack<string> s, int count) {
+        s.Dump();
 		Assert.AreEqual(expected: count, actual: s.Count);
     }
 }
@@ -62,9 +72,9 @@ static class Data {
     }
     
     internal static MyStack<string> Two(string str1, string str2) {
-        var q = new MyStack<string>();
-        q.Push(str1);
-        q.Push(str2);
-        return q;
+        var s = new MyStack<string>();
+        s.Push(str1);
+        s.Push(str2);
+        return s;
     }
 }
