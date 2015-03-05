@@ -1,5 +1,7 @@
 <Query Kind="Program">
+  <Reference>C:\Libs\MongoDB.Bson.dll</Reference>
   <Reference>C:\Libs\nunitlite.dll</Reference>
+  <Namespace>MongoDB.Bson</Namespace>
   <Namespace>NUnit.Framework</Namespace>
   <Namespace>NUnitLite.Runner</Namespace>
 </Query>
@@ -45,8 +47,43 @@ internal class Node<T> {
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(MyStack<string> s, int count) {
-        s.Dump();
 		Assert.AreEqual(expected: count, actual: s.Count);
+    }
+    
+    [Test]
+    public void PushPop_OnEmpty_Empty() {
+        var s = new MyStack<string>();
+        s.Push("asdf");
+        s.Pop();
+		Assert.AreEqual(expected: Data.Zero().ToJson(), actual: s.ToJson());
+    }
+    
+    [Test]
+    public void PushPushPop_OnEmpty_FirstElOnly() {        
+        var s = new MyStack<string>();
+        s.Push("asdf");
+        s.Push("zxcv");
+        s.Pop();
+		Assert.AreEqual(expected: Data.One("asdf").ToJson(), actual: s.ToJson());
+    }
+    
+    [Test]
+    public void PushPushPopPop_OnEmpty_Empty() {        
+        var s = new MyStack<string>();
+        s.Push("asdf");
+        s.Push("zxcv");
+        s.Pop();
+        s.Pop();
+		Assert.AreEqual(expected: Data.Zero().ToJson(), actual: s.ToJson());
+    }
+    
+    [Test]
+    public void PushPopPush_OnEmpty_LastPushedOnly() {
+        var s = new MyStack<string>();
+        s.Push("asdf");
+        s.Pop();
+        s.Push("zxcv");
+		Assert.AreEqual(expected: Data.One("zxcv").ToJson(), actual: s.ToJson());
     }
 }
 
@@ -54,8 +91,8 @@ class TestCaseStorage {
     static IEnumerable TestCases {
         get {
             yield return new TestCaseData(Data.Zero(), 0);
-            yield return new TestCaseData(Data.One("zxcv"), 1);
-            yield return new TestCaseData(Data.Two("asdf", "qwer"), 2);
+            yield return new TestCaseData(Data.One("asdf"), 1);
+            yield return new TestCaseData(Data.Two("poiu", "lkjh"), 2);
         }
     }
 }
