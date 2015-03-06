@@ -11,9 +11,11 @@ void Main() {
 }
 
 internal class MyStack<T> {
+    public Node<T> _top = null;
+    
     public T Min {
         get {
-            return default(T);
+            return _min;
         }
     }
     
@@ -38,10 +40,15 @@ internal class MyStack<T> {
         var node = new Node<T> { Data = obj, Next = _top };
         _top = node;
         _count += 1;
+        if (_min == Int32.MinValue) {
+            _min = obj;
+        } else if (obj < _min) {
+            _min = obj;
+        }
     }
     
     private int _count = 0;
-    public Node<T> _top = null;
+    private int _min = Int32.MinValue;
 }
 
 internal class Node<T> {
@@ -90,6 +97,13 @@ internal class Tests {
         s.Pop();
         s.Push("zxcv");
 		Assert.AreEqual(expected: Data.One("zxcv").ToJson(), actual: s.ToJson());
+    }
+    
+    [Test]
+    public void Push_OnEmpty_MinEqualsEl() {
+        var s = new MyStack<int>();
+        s.Push(5);     
+		Assert.AreEqual(expected: 5, actual: s.Min);
     }
 }
 
