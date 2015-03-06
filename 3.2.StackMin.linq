@@ -11,6 +11,12 @@ void Main() {
 }
 
 internal class MyStack<T> {
+    public T Min {
+        get {
+            return default(T);
+        }
+    }
+    
     public int Count {
         get {
             return _count;
