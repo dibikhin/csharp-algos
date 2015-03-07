@@ -10,10 +10,10 @@ void Main() {
     new NUnitLite.Runner.TextUI().Execute(new[] { "-noheader" });
 }
 
-internal class MyStack<T> {
-    public Node<T> _top = null;
+internal class MyStack {
+    public Node<int> _top = null;
     
-    public T Min {
+    public int Min {
         get {
             return _min;
         }
@@ -25,7 +25,7 @@ internal class MyStack<T> {
         }
     }
 
-    public T Pop() {
+    public int Pop() {
         if (_top != null) {
             var node = _top;
             _top = _top.Next;
@@ -59,14 +59,14 @@ internal class Node<T> {
 [TestFixture]
 internal class Tests { 
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnTestCases_AssertPasses(MyStack<string> s, int count) {
+    public void Run_OnTestCases_AssertPasses(MyStack s, int count) {
 		Assert.AreEqual(expected: count, actual: s.Count);
     }
     
     [Test]
     public void PushPop_OnEmpty_Empty() {
-        var s = new MyStack<string>();
-        s.Push("asdf");
+        var s = new MyStack();
+        s.Push(12);
         s.Pop();
 		Assert.AreEqual(expected: Data.Zero().ToJson(), actual: s.ToJson());
     }
@@ -74,17 +74,17 @@ internal class Tests {
     [Test]
     public void PushPushPop_OnEmpty_FirstElOnly() {        
         var s = new MyStack<string>();
-        s.Push("asdf");
-        s.Push("zxcv");
+        s.Push(23);
+        s.Push(24);
         s.Pop();
-		Assert.AreEqual(expected: Data.One("asdf").ToJson(), actual: s.ToJson());
+		Assert.AreEqual(expected: Data.One(23).ToJson(), actual: s.ToJson());
     }
     
     [Test]
     public void PushPushPopPop_OnEmpty_Empty() {        
         var s = new MyStack<string>();
-        s.Push("asdf");
-        s.Push("zxcv");
+        s.Push(34);
+        s.Push(35);
         s.Pop();
         s.Pop();
 		Assert.AreEqual(expected: Data.Zero().ToJson(), actual: s.ToJson());
@@ -93,15 +93,15 @@ internal class Tests {
     [Test]
     public void PushPopPush_OnEmpty_LastPushedOnly() {
         var s = new MyStack<string>();
-        s.Push("asdf");
+        s.Push(45);
         s.Pop();
-        s.Push("zxcv");
-		Assert.AreEqual(expected: Data.One("zxcv").ToJson(), actual: s.ToJson());
+        s.Push(46);
+		Assert.AreEqual(expected: Data.One(46).ToJson(), actual: s.ToJson());
     }
     
     [Test]
     public void Push_OnEmpty_MinEqualsEl() {
-        var s = new MyStack<int>();
+        var s = new MyStack();
         s.Push(5);     
 		Assert.AreEqual(expected: 5, actual: s.Min);
     }
@@ -111,20 +111,20 @@ class TestCaseStorage {
     static IEnumerable TestCases {
         get {
             yield return new TestCaseData(Data.Zero(), 0);
-            yield return new TestCaseData(Data.One("asdf"), 1);
-            yield return new TestCaseData(Data.Two("poiu", "lkjh"), 2);
+            yield return new TestCaseData(Data.One(67), 1);
+            yield return new TestCaseData(Data.Two(78, 79), 2);
         }
     }
 }
 
 static class Data {
-    internal static MyStack<string> Zero() {
-        return new MyStack<string>();
+    internal static MyStack Zero() {
+        return new MyStack();
     }
 
-    internal static MyStack<string> One(string str) {
-        var s = new MyStack<string>();
-        s.Push(str);
+    internal static MyStack One(int el) {
+        var s = new MyStack();
+        s.Push(el);
         return s;
     }
     
