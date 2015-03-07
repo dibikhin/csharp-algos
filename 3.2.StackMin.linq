@@ -36,8 +36,8 @@ internal class MyStack {
         } 
     }
 
-    public void Push(T obj) {
-        var node = new Node<T> { Data = obj, Next = _top };
+    public void Push(int obj) {
+        var node = new Node<int> { Data = obj, Next = _top };
         _top = node;
         _count += 1;
         if (_min == Int32.MinValue) {
@@ -73,7 +73,7 @@ internal class Tests {
     
     [Test]
     public void PushPushPop_OnEmpty_FirstElOnly() {        
-        var s = new MyStack<string>();
+        var s = new MyStack();
         s.Push(23);
         s.Push(24);
         s.Pop();
@@ -82,7 +82,7 @@ internal class Tests {
     
     [Test]
     public void PushPushPopPop_OnEmpty_Empty() {        
-        var s = new MyStack<string>();
+        var s = new MyStack();
         s.Push(34);
         s.Push(35);
         s.Pop();
@@ -92,7 +92,7 @@ internal class Tests {
     
     [Test]
     public void PushPopPush_OnEmpty_LastPushedOnly() {
-        var s = new MyStack<string>();
+        var s = new MyStack();
         s.Push(45);
         s.Pop();
         s.Push(46);
@@ -128,10 +128,10 @@ static class Data {
         return s;
     }
     
-    internal static MyStack<string> Two(string str1, string str2) {
-        var s = new MyStack<string>();
-        s.Push(str1);
-        s.Push(str2);
+    internal static MyStack Two(int el1, int el2) {
+        var s = new MyStack();
+        s.Push(el1);
+        s.Push(el2);
         return s;
     }
 }
