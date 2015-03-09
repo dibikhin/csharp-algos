@@ -1,5 +1,7 @@
 <Query Kind="Program">
+  <Reference>C:\Libs\MongoDB.Bson.dll</Reference>
   <Reference>C:\Libs\nunitlite.dll</Reference>
+  <Namespace>MongoDB.Bson</Namespace>
   <Namespace>NUnit.Framework</Namespace>
   <Namespace>NUnitLite.Runner</Namespace>
 </Query>
@@ -10,22 +12,63 @@ void Main() {
 
 static class Algos {
     internal static Stack<int> BubbleSort(this Stack<int> unsorted) {
+        var tempStack = new Stack<int>();
+        int? temp1 = null;
+        int? temp2 = null;
+        while (unsorted.Count > 0) {
+            temp1 = unsorted.Pop();
+            if (unsorted.Count > 0) {                
+                temp2 = unsorted.Pop();
+            }
+            if (temp1.HasValue && temp2.HasValue) {
+                if (temp1 > temp2) {
+                    tempStack.Push(temp1.Value);
+                    temp1 = null;
+                } else {
+                    tempStack.Push(temp2.Value);
+                    temp2 = null;
+                }
+            } 
+            if (temp1.HasValue) {
+                tempStack.Push(temp1.Value);
+                temp1 = null;
+            }
+            if (temp2.HasValue) {
+                tempStack.Push(temp2.Value);
+                temp2 = null;
+            }
+        }
+        tempStack.Dump(); temp1.Dump(); temp2.Dump();
+        if (temp1 != null) unsorted.Push(temp1.Value);
+        if (temp2 != null) unsorted.Push(temp2.Value);
+        while (tempStack.Count > 0) {
+            unsorted.Push(tempStack.Pop());
+        }
+        unsorted.Dump();
         return unsorted;
     }
 }
 
 [TestFixture]
-internal class Tests { 
+internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(Stack<int> unsortedStack, Stack<int> sortedStack) {
-		Assert.AreEqual(expected: sortedStack, actual: unsortedStack.BubbleSort());
+		Assert.AreEqual(
+            expected: sortedStack.ToJson(), actual: unsortedStack.BubbleSort().ToJson());
     }
 }
 
 class TestCaseStorage {   
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(new Stack<int>(new [] { 1, 2, 3 }), new Stack<int>(new [] { 3, 2, 1 }));
+//            yield return new TestCaseData(
+//                new Stack<int>(), new Stack<int>());
+//            yield return new TestCaseData(
+//                new Stack<int>(new [] { 1 }), new Stack<int>(new [] { 1 }));
+//            yield return new TestCaseData(
+//                new Stack<int>(new [] { 2, 1 }), new Stack<int>(new [] { 1, 2 }));
+            yield return new TestCaseData(
+                new Stack<int>(new [] { 3, 2, 1 }), new Stack<int>(new [] { 1, 2, 3 }));
         }
     }
 }
