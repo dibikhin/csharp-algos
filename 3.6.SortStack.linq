@@ -15,9 +15,12 @@ static class Algos {
         var tempStack = new Stack<int>();
         int? temp1 = null;
         int? temp2 = null;
+
         while (unsorted.Count > 0) {
-            temp1 = unsorted.Pop();
-            if (unsorted.Count > 0) {                
+            if (temp1 == null) {
+                temp1 = unsorted.Pop();
+            }
+            if (unsorted.Count > 0 && temp2 == null) {
                 temp2 = unsorted.Pop();
             }
             if (temp1.HasValue && temp2.HasValue) {
@@ -28,23 +31,22 @@ static class Algos {
                     tempStack.Push(temp2.Value);
                     temp2 = null;
                 }
-            } 
-            if (temp1.HasValue) {
-                tempStack.Push(temp1.Value);
-                temp1 = null;
-            }
-            if (temp2.HasValue) {
-                tempStack.Push(temp2.Value);
-                temp2 = null;
             }
         }
-        tempStack.Dump(); temp1.Dump(); temp2.Dump();
-        if (temp1 != null) unsorted.Push(temp1.Value);
-        if (temp2 != null) unsorted.Push(temp2.Value);
+
+        if (temp1 != null) {
+            tempStack.Push(temp1.Value);
+            temp1 = null;
+        }
+        if (temp2 != null) {
+            tempStack.Push(temp2.Value);
+            temp2 = null;
+        }
+
         while (tempStack.Count > 0) {
             unsorted.Push(tempStack.Pop());
         }
-        unsorted.Dump();
+
         return unsorted;
     }
 }
