@@ -16,37 +16,42 @@ static class Algos {
         int? temp1 = null;
         int? temp2 = null;
 
-        while (unsorted.Count > 0) {
-            if (temp1 == null) {
-                temp1 = unsorted.Pop();
-            }
-            if (unsorted.Count > 0 && temp2 == null) {
-                temp2 = unsorted.Pop();
-            }
-            if (temp1.HasValue && temp2.HasValue) {
-                if (temp1 > temp2) {
-                    tempStack.Push(temp1.Value);
-                    temp1 = null;
-                } else {
-                    tempStack.Push(temp2.Value);
-                    temp2 = null;
+        bool swapped;
+        do {
+            swapped = false;
+            while (unsorted.Count > 0) {
+                if (temp1 == null) {
+                    temp1 = unsorted.Pop();
+                }
+                if (unsorted.Count > 0 && temp2 == null) {
+                    temp2 = unsorted.Pop();
+                }
+                if (temp1.HasValue && temp2.HasValue) {
+                    if (temp2 < temp1) {
+                        tempStack.Push(temp1.Value);
+                        temp1 = null;
+                        swapped = true;
+                    } else {
+                        tempStack.Push(temp2.Value);
+                        temp2 = null;
+                    }
                 }
             }
-        }
 
-        if (temp1 != null) {
-            tempStack.Push(temp1.Value);
-            temp1 = null;
-        }
-        if (temp2 != null) {
-            tempStack.Push(temp2.Value);
-            temp2 = null;
-        }
-
-        while (tempStack.Count > 0) {
-            unsorted.Push(tempStack.Pop());
-        }
-
+            if (temp1 != null) {
+                tempStack.Push(temp1.Value);
+                temp1 = null;
+            }
+            if (temp2 != null) {
+                tempStack.Push(temp2.Value);
+                temp2 = null;
+            }
+    
+            while (tempStack.Count > 0) {
+                unsorted.Push(tempStack.Pop());
+            }
+        } while (!swapped);
+        
         return unsorted;
     }
 }
