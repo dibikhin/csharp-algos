@@ -11,26 +11,31 @@ void Main() {
 }
 
 static class Algos {
-    internal static List<Node> LevelsToLinkedLists(this Node tree) {
-        if (tree == null) return new List<Node>();
-        return MakeLinkedLists();
+    internal static List<ListNode> LevelsToLinkedLists(this TreeNode tree) {
+        if (tree == null) return new List<ListNode>();
+        return MakeLinkedLists(tree);
     }
     
-    private static List<Node> MakeLinkedLists() {
-        return new List<Node>();
+    private static List<ListNode> MakeLinkedLists(TreeNode tree) {
+        return new List<ListNode>();
     }
 }
 
-internal class Node {
-    public Node Left { get; set; }
+internal class TreeNode {
+    public TreeNode Left { get; set; }
     public int Data { get; set; }
-    public Node Right { get; set; }
+    public TreeNode Right { get; set; }
+}
+
+internal class ListNode {
+    public ListNode Next { get; set; }
+    public int Data { get; set; }
 }
 
 [TestFixture]
 internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnTestCases_AssertPasses(Node tree, List<Node> levelLists) {
+    public void Run_OnTestCases_AssertPasses(TreeNode tree, List<ListNode> levelLists) {
         levelLists.ToJson().Dump("l"); tree.LevelsToLinkedLists().ToJson().Dump("t");
 		Assert.AreEqual(expected: levelLists.ToJson(), actual: tree.LevelsToLinkedLists().ToJson());
     }
@@ -39,17 +44,17 @@ internal class Tests {
 class TestCaseStorage {
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData((Node)null, new List<Node>());
-            yield return new TestCaseData(new Node { Data = 123 }, new List<Node> { new Node { Data = 123 } });
+            yield return new TestCaseData((TreeNode)null, new List<ListNode>());
+            yield return new TestCaseData(new TreeNode { Data = 123 }, new List<ListNode> { new ListNode { Data = 123 } });
             yield return new TestCaseData(new [] { 543, 9876 },
-                new Node { 
-                    Left = new Node { Data = 543 }, 
+                new TreeNode { 
+                    Left = new TreeNode { Data = 543 }, 
                     Data = 9876 });
             yield return new TestCaseData(new [] { 12, 34, 56 },
-                new Node { 
-                    Left = new Node { Data = 12 }, 
+                new TreeNode { 
+                    Left = new TreeNode { Data = 12 }, 
                     Data = 34, 
-                    Right = new Node { Data = 56 } });
+                    Right = new TreeNode { Data = 56 } });
         }
     }
 }
