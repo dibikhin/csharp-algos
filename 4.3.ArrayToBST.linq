@@ -17,16 +17,19 @@ static class Algos {
     }
     
     private static Node MakeTree(int bot, int top, int[] arr) {
-        if (bot >= top) return null;
+        if (bot > top) return null;
         var mid = (top + bot) / 2;
         var midVal = arr[mid];
         //bot.Dump("b"); top.Dump("t"); midVal.Dump("m");
         return new Node {
-            Left = MakeTree(bot, mid, arr),
+            Right = MakeTree(bot, mid - 1, arr),
             Data = midVal,
-            Right = MakeTree(mid, top, arr) };
+            Left = MakeTree(mid + 1, top, arr) };
     }
-}
+} 
+// 0        0        0
+// 0 1      0 1      
+// 0 1 2    0 1 2
 
 internal class Node {
     public Node Left { get; set; }
@@ -38,8 +41,7 @@ internal class Node {
 internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(int[] arr, Node tree) {
-        tree.ToJson().Dump("t");
-        arr.ToBST().ToJson().Dump("a");
+        tree.ToJson().Dump("t"); arr.ToBST().ToJson().Dump("a");
 		Assert.AreEqual(expected: tree.ToJson(), actual: arr.ToBST().ToJson());
     }
 }
@@ -48,17 +50,16 @@ class TestCaseStorage {
     static IEnumerable TestCases {
         get {
             yield return new TestCaseData(new int[0], (Node)null);
-            yield return new TestCaseData(new [] { 123 }, new Node { Left = null, Data = 123, Right = null });
+            yield return new TestCaseData(new [] { 123 }, new Node { Data = 123 });
             yield return new TestCaseData(new [] { 543, 9876 },
                 new Node { 
-                    Left = new Node { Left = null, Data = 543, Right = null }, 
-                    Data = 9876, 
-                    Right = null });
+                    Left = new Node { Data = 543 }, 
+                    Data = 9876 });
             yield return new TestCaseData(new [] { 12, 34, 56 },
                 new Node { 
-                    Left = new Node { Left = null, Data = 12, Right = null }, 
+                    Left = new Node { Data = 12 }, 
                     Data = 34, 
-                    Right = new Node { Left = null, Data = 56, Right = null } });
+                    Right = new Node { Data = 56 } });
         }
     }
 }
