@@ -9,14 +9,14 @@ void Main() {
 }
 
 [TestFixture]
-internal class Tests { 
+internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(int actual, int expected) {
 		Assert.AreEqual(expected: "smth", actual: "smth");
     }
 }
 
-class TestCaseStorage {   
+class TestCaseStorage {
     static IEnumerable TestCases {
         get {
             yield return new TestCaseData("actual", "expected");
