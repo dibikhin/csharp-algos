@@ -37,7 +37,7 @@ internal class Tests {
     }
 }
 
-class TestCaseStorage {   
+class TestCaseStorage {
     static IEnumerable TestCases {
         get {
             //yield return new TestCaseData("", "").Returns();
