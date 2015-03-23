@@ -11,32 +11,32 @@ void Main() {
 }
 
 static class Algos {
-    internal static List<ListNode> LevelsToLinkedLists(this TreeNode tree) {
-        var list = new List<ListNode>();
-        if (tree == null) return list;
-        return MakeLinkedLists(tree, list, dep: 0);
+    internal static TreeNode FindFirstCommonAncentorWith(this TreeNode nodeOne, TreeNode nodeTwo) {
+        return null;
     }
 }
 
 internal class TreeNode {
-    public TreeNode Left { get; set; }
-    public int Data { get; set; }
+    public TreeNode Parent { get; set; }
+    
+    public TreeNode Left { get; set; }    
     public TreeNode Right { get; set; }
+    
+    public int Data { get; set; }
 }
 
 [TestFixture]
 internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnTestCases_AssertPasses(TreeNode tree, List<ListNode> levelLists) {
-        //levelLists.ToJson().Dump("l"); tree.ToJson().Dump("t"); tree.LevelsToLinkedLists().ToJson().Dump("tlevs");
-		Assert.AreEqual(expected: levelLists.ToJson(), actual: tree.LevelsToLinkedLists().ToJson());
+    public void Run_OnTestCases_AssertPasses(TreeNode nodeOne, TreeNode nodeTwo, TreeNode anc) {
+		Assert.AreEqual(expected: anc.ToJson(), actual: node.FindFirstCommonAncentorWith(nodeTwo).ToJson());
     }
 }
 
 class TestCaseStorage {
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData((TreeNode)null, new List<ListNode>());
+            yield return new TestCaseData();
             yield return new TestCaseData(
                 new TreeNode { Data = 123 }, 
                 new List<ListNode> { new ListNode { Data = 123 } });
