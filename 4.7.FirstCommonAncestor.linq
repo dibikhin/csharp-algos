@@ -11,8 +11,45 @@ void Main() {
 }
 
 static class Algos {
-    internal static TreeNode FindFirstCommonAncentorWith(this TreeNode nodeOne, TreeNode nodeTwo) {
+    internal static TreeNode FindFirstCommonAncentorWith(
+        this TreeNode nodeOne, TreeNode nodeTwo, TreeNode tree) {
+        // find first parent whose descendants contain this node
+        if (nodeOne.DescendantsContain(nodeTwo))
+            return nodeOne;
+        else if (nodeOne.Parent != null
+            && nodeOne.Parent.DescendantsContain(nodeTwo))
+            return nodeOne.Parent;
         return null;
+    }
+}
+
+static class TreeNodeExts {
+    internal static bool DescendantsContain(this TreeNode tree, TreeNode aimNode) {
+        if (tree.Left.Data == aimNode.Data || tree.Right.Data == aimNode.Data)
+            return true;
+        if (tree.Left == null && tree.Right == null)
+            return false;
+        if (tree.Left != null)
+            return tree.Left.DescendantsContain(aimNode);
+        if (tree.Right != null)
+            return tree.Right.DescendantsContain(aimNode);
+        return false;
+    }
+}
+
+class TestCaseStorage {
+    static IEnumerable TestCases {
+        get {
+            yield return new TestCaseData(
+                new TreeNode {
+                    Parent = null,
+                    Left = new TreeNode { Data = 23 },
+                    Right = new TreeNode { Data = 11 },
+                    Data = 67 },
+                new TreeNode { Data = 23 },
+                new TreeNode { Data = 11 },
+                new TreeNode { Data = 67 });
+        }
     }
 }
 
@@ -28,33 +65,10 @@ internal class TreeNode {
 [TestFixture]
 internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnTestCases_AssertPasses(TreeNode nodeOne, TreeNode nodeTwo, TreeNode anc) {
-		Assert.AreEqual(expected: anc.ToJson(), actual: node.FindFirstCommonAncentorWith(nodeTwo).ToJson());
-    }
-}
-
-class TestCaseStorage {
-    static IEnumerable TestCases {
-        get {
-            yield return new TestCaseData();
-            yield return new TestCaseData(
-                new TreeNode { Data = 123 }, 
-                new List<ListNode> { new ListNode { Data = 123 } });
-            yield return new TestCaseData(
-                new TreeNode { 
-                    Left = new TreeNode { Data = 543 }, 
-                    Data = 9876 },
-                new List<ListNode> { 
-                    new ListNode { Data = 9876 },
-                    new ListNode { Data = 543 } });
-            yield return new TestCaseData(
-                new TreeNode { 
-                    Left = new TreeNode { Data = 12 }, 
-                    Data = 34, 
-                    Right = new TreeNode { Data = 56 } },
-                new List<ListNode> { 
-                    new ListNode { Data = 34 },
-                    new ListNode { Data = 12, Next = new ListNode { Data = 56 } } });
-        }
+    public void Run_OnTestCases_AssertPasses(TreeNode tree, TreeNode nodeOne, TreeNode nodeTwo, TreeNode ancestor) {
+        tree.Dump();
+		Assert.AreEqual(
+            expected: ancestor.Data,
+            actual: nodeOne.FindFirstCommonAncentorWith(nodeTwo, tree).Data);
     }
 }
