@@ -19,13 +19,15 @@ static class Algos {
         else if (nodeOne.Parent != null
             && nodeOne.Parent.DescendantsContain(nodeTwo))
             return nodeOne.Parent;
+        throw new Exception();
         return null;
     }
 }
 
 static class TreeNodeExts {
     internal static bool DescendantsContain(this TreeNode tree, TreeNode aimNode) {
-        if (tree.Left.Data == aimNode.Data || tree.Right.Data == aimNode.Data)
+        tree.Data.Dump(); aimNode.Data.Dump();
+        if (tree.Data == aimNode.Data)
             return true;
         if (tree.Left == null && tree.Right == null)
             return false;
@@ -40,15 +42,21 @@ static class TreeNodeExts {
 class TestCaseStorage {
     static IEnumerable TestCases {
         get {
-            yield return new TestCaseData(
-                new TreeNode {
+            var one = new TreeNode { Data = 23 };
+            var two = new TreeNode { Data = 11 };
+            var three = new TreeNode {
                     Parent = null,
-                    Left = new TreeNode { Data = 23 },
-                    Right = new TreeNode { Data = 11 },
-                    Data = 67 },
-                new TreeNode { Data = 23 },
-                new TreeNode { Data = 11 },
-                new TreeNode { Data = 67 });
+                    Left = one,
+                    Right = two,
+                    Data = 67 };
+            one.Parent = three;
+            two.Parent = three;
+            
+            yield return new TestCaseData(
+                three,
+                one,
+                two,
+                three);
         }
     }
 }
@@ -65,8 +73,8 @@ internal class TreeNode {
 [TestFixture]
 internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
-    public void Run_OnTestCases_AssertPasses(TreeNode tree, TreeNode nodeOne, TreeNode nodeTwo, TreeNode ancestor) {
-        tree.Dump();
+    public void Run_OnTestCases_AssertPasses(
+        TreeNode tree, TreeNode nodeOne, TreeNode nodeTwo, TreeNode ancestor) {
 		Assert.AreEqual(
             expected: ancestor.Data,
             actual: nodeOne.FindFirstCommonAncentorWith(nodeTwo, tree).Data);
