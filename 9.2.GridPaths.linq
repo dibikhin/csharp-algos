@@ -10,6 +10,12 @@ void Main() {
 
 static class Algos {
     internal static List<Path> FindPaths(this Grid grid) {
+        // while can go down or can go right
+        // add curpoint to path
+        // if can move right and (rightpoint is endpoint or (not in any of paths (= checked is false))) than move right
+        // if can move down and (downpoint is endpoint or (not in any of paths)) than move down
+        //
+        // filter only paths containing endpoint
         return new List<Path>();
     }
 }
