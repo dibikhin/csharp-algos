@@ -10,12 +10,34 @@ void Main() {
 
 static class Algos {
     internal static List<Path> FindPaths(this Grid grid) {
-        // while can go down or can go right
-        // add curpoint to path
-        // if can move right and (rightpoint is endpoint or (not in any of paths (= checked is false))) than move right
-        // if can move down and (downpoint is endpoint or (not in any of paths)) than move down
-        //
-        // filter only paths containing endpoint
+//      while grid have notchecked points
+//            create path
+//            add path to paths
+//            while can go down or can go right
+//            add curpoint to path
+//            if can move right and (rightpoint is endpoint or (not in any of paths (= checked is false))) than move right
+//            if can move down and (downpoint is endpoint or (not in any of paths)) than move down
+//            
+//      filter only paths containing endpoint
+
+        var pointer = ?;
+        var paths = new List<Path>();
+        while (grid.HasNovelPoints()) {
+            var path = new Path();
+            paths.Add(path);
+            while (pointer.CanStepDown(grid) || pointer.CanStepRight(grid)) {
+                path.Add(pointer);
+                if (pointer.CanStepRight && (pointer.IsNovel || pointer.RightPoint == grid.EndPoint)) {
+                    pointer.MoveRight();
+                }
+                if (pointer.CanStepDown && (pointer.IsNovel || pointer.DownPoint == grid.EndPoint)) {
+                    pointer.MoveDown();
+                }
+            }
+        }
+        
+        // how to force pointer to visit new paths?
+        
         return new List<Path>();
     }
 }
@@ -33,6 +55,10 @@ class TestCaseStorage {
         get {
             yield return new TestCaseData(
                 new Grid { XSize = 2, YSize = 2 },
+                /*
+                    + +
+                    + +
+                */
                 new List<Path> {
                     new Path (
                         new List<Point> {
@@ -40,12 +66,20 @@ class TestCaseStorage {
                             new Point(0, 1),
                             new Point(1, 1)}
                     ),
+                    /*
+                        1 2
+                        - 3
+                    */
                     new Path (
                         new List<Point> {
                             new Point(0, 0),
                             new Point(1, 0),
                             new Point(1, 1)}
                     )
+                    /*
+                        1 -
+                        2 3
+                    */
                 });
         }
     }
