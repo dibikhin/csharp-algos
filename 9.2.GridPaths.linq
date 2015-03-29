@@ -22,16 +22,17 @@ static class Algos {
 
         var pointer = ?;
         var paths = new List<Path>();
-        while (grid.HasNovelPoints()) {
+        while (HasNovelPoints(grid)) {
             var path = new Path();
             paths.Add(path);
-            while (pointer.CanStepDown(grid) || pointer.CanStepRight(grid)) {
+            while (CanStepDown(pointer, grid) || CanStepRight(pointer, grid)) {
                 path.Add(pointer);
-                if (pointer.CanStepRight && (pointer.IsNovel || pointer.RightPoint == grid.EndPoint)) {
-                    pointer.MoveRight();
+                UpPasses(pointer, grid);
+                if (CanStepRight(pointer, grid) && (IsLessPassed(pointer, grid) || RightPoint(pointer, grid) == EndPoint(grid))) {
+                    MoveRight(pointer, grid);
                 }
-                if (pointer.CanStepDown && (pointer.IsNovel || pointer.DownPoint == grid.EndPoint)) {
-                    pointer.MoveDown();
+                if (CanStepDown(pointer, grid) && (IsLessPassed(pointer, grid) || DownPoint(pointer, grid) == EndPoint(grid))) {
+                    MoveDown(pointer, grid);
                 }
             }
         }
