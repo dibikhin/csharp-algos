@@ -37,8 +37,6 @@ static class Algos {
             }
         }
         
-        // how to force pointer to visit new paths?
-        
         return new List<Path>();
     }
 }
