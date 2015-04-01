@@ -10,15 +10,6 @@ void Main() {
 
 static class Algos {
     internal static List<Path> FindPaths(this Grid grid) {
-//      while grid have notchecked points
-//            create path
-//            add path to paths
-//            while can go down or can go right
-//            add curpoint to path
-//            if can move right and (rightpoint is endpoint or (not in any of paths (= checked is false))) than move right
-//            if can move down and (downpoint is endpoint or (not in any of paths)) than move down
-//
-
         var pointer = ?;
         var paths = new List<Path>();
         while (HasNovelPoints(grid)) {
@@ -27,10 +18,12 @@ static class Algos {
             while (CanStepDown(pointer, grid) || CanStepRight(pointer, grid)) {
                 path.Add(pointer);
                 UpPasses(pointer, grid);
-                if (CanStepRight(pointer, grid) && (IsLessPassed(pointer, grid) || RightPoint(pointer, grid) == EndPoint(grid))) {
+                if (CanStepRight(pointer, grid) 
+                    && (IsLessPassed("right", pointer, grid) || RightPoint(pointer, grid) == EndPoint(grid))) {
                     MoveRight(pointer, grid);
                 }
-                if (CanStepDown(pointer, grid) && (IsLessPassed(pointer, grid) || DownPoint(pointer, grid) == EndPoint(grid))) {
+                if (CanStepDown(pointer, grid) 
+                    && (IsLessPassed("down", pointer, grid) || DownPoint(pointer, grid) == EndPoint(grid))) {
                     MoveDown(pointer, grid);
                 }
             }
