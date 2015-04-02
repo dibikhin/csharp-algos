@@ -10,7 +10,7 @@ void Main() {
 
 static class Algos {
     internal static List<Path> FindPaths(this Grid grid) {
-        var pointer = ?;
+        var pointer = new Point();
         var paths = new List<Path>();
         while (HasNovelPoints(grid)) {
             var path = new Path();
