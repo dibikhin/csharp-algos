@@ -19,7 +19,7 @@ static class Algos {
                 path.Add(pointer);
                 UpPasses(pointer, grid);
                 if (CanStepRight(pointer, grid) 
-                    && (IsLessPassed("right", pointer, grid) || RightPoint(pointer, grid) == EndPoint(grid))) {
+                    && (IsLessPassed("right" , pointer, grid) || RightPoint(pointer, grid) == EndPoint(grid))) {
                     MoveRight(pointer, grid);
                 }
                 if (CanStepDown(pointer, grid) 
