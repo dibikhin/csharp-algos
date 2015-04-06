@@ -35,7 +35,7 @@ static class Algos {
 }
 
 [TestFixture]
-internal class Tests { 
+internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public bool IsCharsUnique_OnTestCases_ReturnsExpected(string str) {
 		return Algos.IsCharsUnique(str);

@@ -43,7 +43,7 @@ static class Algos {
 }
 
 [TestFixture]
-internal class Tests { 
+internal class Tests {
     [Test, TestCaseSource(typeof(TestCaseStorage), "TestCases")]
     public void Run_OnTestCases_AssertPasses(string input, string oldValue, string newValue, string expected) {
 		Assert.AreEqual(expected: expected, actual: input.MyReplace(oldValue, newValue));
